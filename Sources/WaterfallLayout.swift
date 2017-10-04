@@ -36,7 +36,7 @@ extension WaterfallLayoutDelegate {
 }
 
 public class WaterfallLayout: UICollectionViewLayout {
-    public static let automaticSize: CGSize = UICollectionViewFlowLayoutAutomaticSize
+    public static let automaticSize: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
     
     public enum Layout {
         case flow(column: Int)
