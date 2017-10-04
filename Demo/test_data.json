@@ -1,0 +1,87 @@
+{
+  "topic_item": {
+    "color": "#123456",
+    "size": [300, 300]
+  },
+  "items": [
+    {
+      "color": "#FF4567",
+      "size": [300, 200]
+    },
+    {
+      "color": "#34FF78",
+      "size": [300, 300]
+    },
+    {
+      "color": "#4567FF",
+      "size": [300, 400]
+    },
+    {
+      "color": "#FF789A",
+      "size": [300, 350]
+    },
+    {
+      "color": "#67FFAB",
+      "size": [300, 200]
+    },
+    {
+      "color": "#FF4567",
+      "size": [300, 200]
+    },
+    {
+      "color": "#34FF78",
+      "size": [300, 300]
+    },
+    {
+      "color": "#4567FF",
+      "size": [300, 400]
+     },
+    {
+      "color": "#FF789A",
+      "size": [300, 350]
+    },
+    {
+      "color": "#67FFAB",
+      "size": [300, 200]
+    }
+  ],
+  "news": [
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    },
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    },
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    },
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    },
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    },
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    },
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    },
+    {
+      "title": "foo",
+      "description": "foobarbazfoobarbazfoobarbazfoobarbazfoobarbaz"
+    }
+  ],
+  "contents": [
+    "topic_item",
+    "items",
+    "news"    
+  ]
+}
