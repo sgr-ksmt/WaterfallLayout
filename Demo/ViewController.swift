@@ -11,9 +11,9 @@ import WaterfallLayout
 
 class ViewController: UIViewController {
 
-    lazy var layout = WaterfallLayout()
     @IBOutlet private weak var collectionView: UICollectionView! {
         didSet {
+            let layout = WaterfallLayout()
             layout.delegate = self
             layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
             layout.minimumLineSpacing = 8.0
