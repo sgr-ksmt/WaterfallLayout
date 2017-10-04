@@ -7,7 +7,7 @@ Waterfall layout in iOS
 [![CocoaPods](https://img.shields.io/badge/Cocoa%20Pods-✓-4BC51D.svg?style=flat)](https://cocoapods.org/pods/WaterfallLayout)
 [![CocoaPodsDL](https://img.shields.io/cocoapods/dt/WaterfallLayout.svg)](https://cocoapods.org/pods/WaterfallLayout)
 
-<center><img src="" /></center>
+![](logo.png)
 
 
 ## Features
@@ -15,7 +15,7 @@ Waterfall layout in iOS
 - Self-Sizing cell available
 
 
-<img src="" /> <!--movie-->
+![](demo.gif)
 
 ## How to use
 
