@@ -166,10 +166,12 @@ public class WaterfallLayout: UICollectionViewLayout {
         let newContentSize = self.collectionViewContentSize
         context.contentSizeAdjustment = CGSize(width: 0, height: newContentSize.height - oldContentSize.height)
 
-        let indexPaths: [IndexPath] = (originalAttributes.indexPath.item..<collectionView.numberOfItems(inSection: originalAttributes.indexPath.section))
+        /*
+         let indexPaths: [IndexPath] = (originalAttributes.indexPath.item..<collectionView.numberOfItems(inSection: originalAttributes.indexPath.section))
             .map { [originalAttributes.indexPath.section, $0] }
-        context.invalidateItems(at: indexPaths)
-
+         context.invalidateItems(at: indexPaths)
+ */
+        _ = context.invalidateEverything
         return context
     }
 
