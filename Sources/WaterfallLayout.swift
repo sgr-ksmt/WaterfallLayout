@@ -213,6 +213,7 @@ public class WaterfallLayout: UICollectionViewLayout {
     }
 
     private func layoutItems(position: CGFloat, collectionView: UICollectionView, delegate: WaterfallLayoutDelegate, section: Int) {
+        let sectionInset = self.sectionInset(for: section)
         let minimumInteritemSpacing = self.minimumInteritemSpacing(for: section)
         let minimumLineSpacing = self.minimumInteritemSpacing(for: section)
 
