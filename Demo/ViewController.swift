@@ -105,7 +105,7 @@ extension ViewController: WaterfallLayoutDelegate {
     func collectionViewLayout(for section: Int) -> WaterfallLayout.Layout {
         switch response.contents[section] {
         case .topicItem: return .flow(column: 1)
-        case .items: return .waterfall(column: 2)
+        case .items: return .waterfall(column: 2, distributionMethod: .balanced)
         case .news: return .flow(column: 1)
         }
     }
