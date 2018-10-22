@@ -214,7 +214,7 @@ public class WaterfallLayout: UICollectionViewLayout {
             position = attributes.frame.maxY + headerInset.bottom
         }
 
-        position += sectionInset.top
+        position += sectionInset(for: section).top
         columnHeights[section] = Array(repeating: position, count: columnCount)
     }
 
