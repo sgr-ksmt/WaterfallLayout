@@ -68,7 +68,7 @@ extension UIColor {
             hexCode.remove(at: hexCode.startIndex)
         }
 
-        if(hexCode.characters.count != 6) {
+        if(hexCode.count != 6) {
             return nil
         }
 

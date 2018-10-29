@@ -22,7 +22,7 @@ class ViewController: UIViewController {
             collectionView.collectionViewLayout = layout
             collectionView.register(UINib(nibName: "TextCell", bundle: nil), forCellWithReuseIdentifier: "TextCell")
             collectionView.register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
-            collectionView.register(UINib(nibName: "HeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderView")
+            collectionView.register(UINib(nibName: "HeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
             collectionView.dataSource = self
         }
     }
@@ -76,7 +76,7 @@ extension ViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
-        case UICollectionElementKindSectionHeader:
+        case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderView", for: indexPath) as! HeaderView
             switch response.contents[indexPath.section] {
             case .topicItem: header.configure(with: "Topic color using flow layout")
