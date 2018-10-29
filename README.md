@@ -2,7 +2,7 @@
 Waterfall layout in iOS
 
 [![GitHub release](https://img.shields.io/github/release/sgr-ksmt/WaterfallLayout.svg)](https://github.com/sgr-ksmt/WaterfallLayout/releases)
-![Language](https://img.shields.io/badge/language-Swift%204-orange.svg)
+![Language](https://img.shields.io/badge/language-Swift%204.2-orange.svg)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![CocoaPods](https://img.shields.io/badge/Cocoa%20Pods-✓-4BC51D.svg?style=flat)](https://cocoapods.org/pods/WaterfallLayout)
 [![CocoaPodsDL](https://img.shields.io/cocoapods/dt/WaterfallLayout.svg)](https://cocoapods.org/pods/WaterfallLayout)
