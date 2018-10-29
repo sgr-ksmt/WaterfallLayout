@@ -37,15 +37,21 @@ extension WaterfallLayoutDelegate {
 
 public class WaterfallLayout: UICollectionViewLayout {
     public static let automaticSize: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
+
+    public enum DistributionMethod {
+
+        case equal
+        case balanced
+    }
     
     public enum Layout {
         case flow(column: Int)
-        case waterfall(column: Int)
+        case waterfall(column: Int, distributionMethod :DistributionMethod)
 
         var column: Int {
             switch self {
             case let .flow(column): return column
-            case let .waterfall(column): return column
+            case let .waterfall(column, _): return column
             }
         }
     }
@@ -166,10 +172,12 @@ public class WaterfallLayout: UICollectionViewLayout {
         let newContentSize = self.collectionViewContentSize
         context.contentSizeAdjustment = CGSize(width: 0, height: newContentSize.height - oldContentSize.height)
 
-        let indexPaths: [IndexPath] = (originalAttributes.indexPath.item..<collectionView.numberOfItems(inSection: originalAttributes.indexPath.section))
+        /*
+         let indexPaths: [IndexPath] = (originalAttributes.indexPath.item..<collectionView.numberOfItems(inSection: originalAttributes.indexPath.section))
             .map { [originalAttributes.indexPath.section, $0] }
-        context.invalidateItems(at: indexPaths)
-
+         context.invalidateItems(at: indexPaths)
+ */
+        _ = context.invalidateEverything
         return context
     }
 
@@ -206,11 +214,39 @@ public class WaterfallLayout: UICollectionViewLayout {
             position = attributes.frame.maxY + headerInset.bottom
         }
 
-        position += sectionInset.top
+        position += sectionInset(for: section).top
         columnHeights[section] = Array(repeating: position, count: columnCount)
     }
 
+    private func pickColumn(itemIndex: Int,
+                            delegate: WaterfallLayoutDelegate,
+                            section: Int) -> Int {
+
+        let layout = delegate.collectionViewLayout(for: section)
+        switch layout {
+        case .flow:
+            let columnCount = delegate.collectionViewLayout(for: section).column
+            return itemIndex % columnCount
+        case .waterfall(_, let distributionMethod):
+            if distributionMethod == .balanced {
+                var minIndex: Int = 0
+                var minValue = CGFloat.greatestFiniteMagnitude
+                columnHeights[section].enumerated().forEach { (index, element) in
+                    if element < minValue {
+                        minIndex = index
+                        minValue = element
+                    }
+                }
+                return minIndex
+            } else {
+                let columnCount = delegate.collectionViewLayout(for: section).column
+                return itemIndex % columnCount
+            }
+        }
+    }
+
     private func layoutItems(position: CGFloat, collectionView: UICollectionView, delegate: WaterfallLayoutDelegate, section: Int) {
+        let sectionInset = self.sectionInset(for: section)
         let minimumInteritemSpacing = self.minimumInteritemSpacing(for: section)
         let minimumLineSpacing = self.minimumInteritemSpacing(for: section)
 
@@ -224,7 +260,7 @@ public class WaterfallLayout: UICollectionViewLayout {
 
         (0..<itemCount).forEach { index in
             let indexPath: IndexPath = [section, index]
-            let columnIndex = index % columnCount
+            let columnIndex = pickColumn(itemIndex: index, delegate: delegate, section: section)
 
             let itemHeight: CGFloat
             let itemSize = delegate.collectionView(collectionView, layout: self, sizeForItemAt: indexPath)
