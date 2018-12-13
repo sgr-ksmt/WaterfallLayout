@@ -159,6 +159,14 @@ public class WaterfallLayout: UICollectionViewLayout {
     }
 
     override public func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+        if let delegate = delegate {
+            // For .waterfall mode, disabling shouldInvalidateLayout will prevent infinite loop to occur due to unstable constraints.
+            // e.g. UIImageView causes AL constraints to be updated due to content hugging that causes infinite UI update.
+            if case .waterfall = delegate.collectionViewLayout(for: originalAttributes.indexPath.section) {
+                return false
+            }
+        }
+
         return cachedItemSizes[originalAttributes.indexPath] != preferredAttributes.size
     }
 
