@@ -35,7 +35,7 @@ extension WaterfallLayoutDelegate {
     public func collectionView(_ collectionView: UICollectionView, layout: WaterfallLayout, estimatedSizeForItemAt indexPath: IndexPath) -> CGSize? { return nil }
 }
 
-public class WaterfallLayout: UICollectionViewLayout {
+open class WaterfallLayout: UICollectionViewLayout {
     public static let automaticSize: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
 
     public enum DistributionMethod {
@@ -67,35 +67,35 @@ public class WaterfallLayout: UICollectionViewLayout {
         static let estimatedItemSize: CGSize = CGSize(width: 300.0, height: 300.0)
     }
 
-    public var minimumLineSpacing: CGFloat = Const.minimumLineSpacing {
+    open var minimumLineSpacing: CGFloat = Const.minimumLineSpacing {
         didSet { invalidateLayoutIfChanged(oldValue, minimumLineSpacing) }
     }
 
-    public var minimumInteritemSpacing: CGFloat = Const.minimumInteritemSpacing {
+    open var minimumInteritemSpacing: CGFloat = Const.minimumInteritemSpacing {
         didSet { invalidateLayoutIfChanged(oldValue, minimumInteritemSpacing) }
     }
 
-    public var sectionInset: UIEdgeInsets = Const.sectionInset {
+    open var sectionInset: UIEdgeInsets = Const.sectionInset {
         didSet { invalidateLayoutIfChanged(oldValue, sectionInset) }
     }
 
-    public var headerHeight: CGFloat = Const.headerHeight {
+    open var headerHeight: CGFloat = Const.headerHeight {
         didSet { invalidateLayoutIfChanged(oldValue, headerHeight) }
     }
 
-    public var headerInset: UIEdgeInsets = Const.headerInset {
+    open var headerInset: UIEdgeInsets = Const.headerInset {
         didSet { invalidateLayoutIfChanged(oldValue, headerInset) }
     }
 
-    public var footerHeight: CGFloat = Const.footerHeight {
+    open var footerHeight: CGFloat = Const.footerHeight {
         didSet { invalidateLayoutIfChanged(oldValue, footerHeight) }
     }
 
-    public var footerInset: UIEdgeInsets = Const.footerInset {
+    open var footerInset: UIEdgeInsets = Const.footerInset {
         didSet { invalidateLayoutIfChanged(oldValue, footerInset) }
     }
 
-    public var estimatedItemSize: CGSize = Const.estimatedItemSize {
+    open var estimatedItemSize: CGSize = Const.estimatedItemSize {
         didSet { invalidateLayoutIfChanged(oldValue, estimatedItemSize) }
     }
 
@@ -108,7 +108,7 @@ public class WaterfallLayout: UICollectionViewLayout {
 
     public weak var delegate: WaterfallLayoutDelegate?
 
-    public override func prepare() {
+    open override func prepare() {
         super.prepare()
         cleaunup()
 
@@ -131,7 +131,7 @@ public class WaterfallLayout: UICollectionViewLayout {
         }
     }
 
-    public override var collectionViewContentSize: CGSize {
+    open override var collectionViewContentSize: CGSize {
         guard let collectionView = collectionView, collectionView.numberOfSections > 0  else {
             return .zero
         }
@@ -140,7 +140,7 @@ public class WaterfallLayout: UICollectionViewLayout {
         return contentSize
     }
 
-    public override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    open override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         if indexPath.section >= sectionItemAttributes.count {
             return nil
         }
@@ -150,15 +150,15 @@ public class WaterfallLayout: UICollectionViewLayout {
         return sectionItemAttributes[indexPath.section][indexPath.item]
     }
 
-    public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         return allItemAttributes.filter { rect.intersects($0.frame) }
     }
 
-    public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return newBounds.width != (collectionView?.bounds ?? .zero).width
     }
 
-    override public func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+    override open func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
         if let delegate = delegate {
             // For .waterfall mode, disabling shouldInvalidateLayout will prevent infinite loop to occur due to unstable constraints.
             // e.g. UIImageView causes AL constraints to be updated due to content hugging that causes infinite UI update.
@@ -170,7 +170,7 @@ public class WaterfallLayout: UICollectionViewLayout {
         return cachedItemSizes[originalAttributes.indexPath] != preferredAttributes.size
     }
 
-    override public func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
+    override open func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
         let context = super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
 
         guard let _ = collectionView else { return context }
