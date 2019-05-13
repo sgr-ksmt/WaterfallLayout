@@ -214,7 +214,7 @@ public class WaterfallLayout: UICollectionViewLayout {
             result.minimum = firstItem.frame.minY
             result.maximum = lastItem.frame.maxY
 //            result.minimum -= 48.0
-            result.maximum -= 48.0
+            result.maximum -= 16.0
             
             result.minimum -= sectionInset.top
             result.maximum += (sectionInset.top + sectionInset.bottom)
