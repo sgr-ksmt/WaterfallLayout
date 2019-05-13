@@ -151,11 +151,80 @@ public class WaterfallLayout: UICollectionViewLayout {
     }
 
     public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        return allItemAttributes.filter { rect.intersects($0.frame) }
+        let sections = NSMutableIndexSet()
+        var newLayoutAttributes = [UICollectionViewLayoutAttributes]()
+        
+        for layoutAttributesSet in allItemAttributes {
+            if layoutAttributesSet.representedElementCategory == .cell {
+                newLayoutAttributes.append(layoutAttributesSet)
+                sections.add(layoutAttributesSet.indexPath.section)
+            } else if layoutAttributesSet.representedElementCategory == .supplementaryView {
+                sections.add(layoutAttributesSet.indexPath.section)
+            }
+        }
+        
+        for section in sections {
+            let indexPath = IndexPath(item: 0, section: section)
+            if let sectionAttributes = self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, at: indexPath) {
+                newLayoutAttributes.append(sectionAttributes)
+            }
+        }
+
+        dump(newLayoutAttributes)
+        return newLayoutAttributes
+//        return allItemAttributes.filter { rect.intersects($0.frame) }
+    }
+    
+    override public func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard let boundaries = boundaries(forSection: indexPath.section) else { return headersAttribute[indexPath.section] }
+        guard let collectionView = collectionView else { return headersAttribute[indexPath.section] }
+        let contentOffsetY = collectionView.contentOffset.y
+        var frameForSupplymentaryView = headersAttribute[indexPath.section]!.frame
+        
+        let minimum = boundaries.minimum - frameForSupplymentaryView.height
+        let maximum = boundaries.maximum - frameForSupplymentaryView.height
+        
+        if contentOffsetY < minimum {
+            frameForSupplymentaryView.origin.y = minimum
+        } else if contentOffsetY > maximum {
+            frameForSupplymentaryView.origin.y = maximum
+        } else {
+            frameForSupplymentaryView.origin.y = contentOffsetY
+        }
+        
+        headersAttribute[indexPath.section]?.frame = frameForSupplymentaryView
+        headersAttribute[indexPath.section]?.zIndex = 9999
+        return headersAttribute[indexPath.section]
+        
+    }
+    
+    func boundaries(forSection section: Int) -> (minimum: CGFloat, maximum: CGFloat)? {
+        var result = (minimum: CGFloat(0), maximum: CGFloat(0))
+        guard let collectionView = collectionView else {
+            return result
+        }
+        
+        let numberOfItems = collectionView.numberOfItems(inSection: section)
+        guard numberOfItems > 0 else {
+            return result
+        }
+        
+        if let firstItem = layoutAttributesForItem(at: IndexPath(item: 0, section: section)),
+            let lastItem = layoutAttributesForItem(at: IndexPath(item: numberOfItems-1, section: section)) {
+            result.minimum = firstItem.frame.minY
+            result.maximum = lastItem.frame.maxY
+//            result.minimum -= 48.0
+            result.maximum -= 48.0
+            
+            result.minimum -= sectionInset.top
+            result.maximum += (sectionInset.top + sectionInset.bottom)
+        }
+        return result
+        
     }
 
     public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        return newBounds.width != (collectionView?.bounds ?? .zero).width
+        return true
     }
 
     override public func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
