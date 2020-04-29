@@ -106,6 +106,7 @@ public class WaterfallLayout: UICollectionViewLayout {
     private lazy var sectionItemAttributes = [[UICollectionViewLayoutAttributes]]()
     private lazy var cachedItemSizes = [IndexPath: CGSize]()
 
+    public var enableStickyHeader: Bool = false
     public weak var delegate: WaterfallLayoutDelegate?
 
     public override func prepare() {
@@ -151,22 +152,48 @@ public class WaterfallLayout: UICollectionViewLayout {
     }
 
     public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        return allItemAttributes.filter { rect.intersects($0.frame) }
+        let attributes = allItemAttributes
+        if enableStickyHeader {
+            for attr in allItemAttributes {
+                if attr.representedElementKind == UICollectionView.elementKindSectionHeader {
+                    attr.zIndex = 1024
+                    let section = attr.indexPath.section
+                    guard let numberOfItemsInSection = collectionView?.numberOfItems(inSection: section) else {
+                        return attributes
+                    }
+                    let firstCellIndexPath = IndexPath(item: 0, section: section)
+                    let lastCellIndexPath = IndexPath(item: max(0, numberOfItemsInSection - 1), section: section)
+                    
+                    guard let firstCellAttributes = layoutAttributesForItem(at: firstCellIndexPath),
+                        let lastCellAttributes = layoutAttributesForItem(at: lastCellIndexPath),
+                        let collectionView = collectionView else {
+                        return attributes
+                    }
+                    let headerHeight = attr.frame.height
+                    var origin = attr.frame.origin
+                    let y1 = max(collectionView.contentOffset.y, firstCellAttributes.frame.minY - headerHeight)
+                    let y2 = lastCellAttributes.frame.maxY - headerHeight
+
+                    origin.y = min(y1, y2)
+                    attr.frame = CGRect(x: origin.x, y: origin.y, width: attr.frame.width, height: attr.frame.height)
+                }
+            }
+        }
+        return attributes
     }
 
     public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        if enableStickyHeader {
+            return true
+        }
         return newBounds.width != (collectionView?.bounds ?? .zero).width
     }
 
     override public func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
-        if let delegate = delegate {
-            // For .waterfall mode, disabling shouldInvalidateLayout will prevent infinite loop to occur due to unstable constraints.
-            // e.g. UIImageView causes AL constraints to be updated due to content hugging that causes infinite UI update.
-            if case .waterfall = delegate.collectionViewLayout(for: originalAttributes.indexPath.section) {
-                return false
-            }
+        if let _ = delegate {
+            // fix a crash using custom size
+            return false
         }
-
         return cachedItemSizes[originalAttributes.indexPath] != preferredAttributes.size
     }
 
